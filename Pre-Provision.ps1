@@ -38,15 +38,14 @@ get-tpm | format-list TpmPresent,TpmReady,TpmEnabled,TpmActivated,TpmOwned,Resta
 # Stop Script if TPM check fails
 $TPMver = wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tpm get SpecVersion -value
 if ($TPMver -like "*2.0*") {
-	Write-Host "The TPM Specification version on this Device is 2.0 which is the requirement for Autopilot Pre-provisioning"
+	Write-Host "The TPM Specification version on this Device is 2.0. Continuing..."
 	Write-Hoost "`n"
 } else {
-	Write-Host "   !!! ATTENTION !!!"
+	Write-Host "WARNING:"
 	Write-Host "Autopilot Pre-Provisiong will not work on this device because"
-	Write-Host "The TPM Specification version is not 2.0"
-	Write-Host "Or it is not enabled, or is not configured correctly"
+	Write-Host "The TPM Specification version is not 2.0 or some other issue."
 	Write-Host "`n"
-	Write-Host "Please use Autopilot User-Driven instead"
+	Write-Host "Please enroll manually or attempt to run this again after a reboot."
 	write-Host "`n"
 	Pause
 	exit
@@ -72,10 +71,7 @@ Write-Host "4. Preform windows updates on the system and restart as needed. (Wil
 Write-Host "`n"
 Write-Host "5. From Settings > App > Installed Apps uninstall any software not needed."
 Write-Host "`n"
-Write-Host "6. (For Dell only) In the CMD Prompt window, uninstall Dell Optimizer by running the following script.."
-Write-Host "	D:\RemoveDellOptimizer.cmd"
-Write-Host "`n"
-Write-Host "7. Re-Name the device following the company naming scheme and restart the device a final time"
+Write-Host "6. Re-Name the device following the company naming scheme and restart the device a final time"
 Write-Host "`n"
 Pause
 
@@ -84,7 +80,7 @@ Write-Host "`n"
 $systemDeviceName = Hostname
 
 while ( $condition -lt 1) {
-	$userDeviceName = Read-Host "Please Enter the new DeviceName:"
+	$userDeviceName = Read-Host "Please Enter the new Device Name:"
 	$systemDeviceName = Hostname
 
 	Write-Host "`n"
@@ -96,7 +92,7 @@ while ( $condition -lt 1) {
 	} else {
 		Wirte-Host "The device name does not match what was entered. Please check your spelling and the device name and attempt again."
 		Write-Host "`n"
-		Write-Host "If this doesn't work, please rename the device and start the script again"
+		Write-Host "If this doesn't work, please rename the device and start the script again."
 		Write-Host "`n"
 		$condition = 0
 	}
@@ -105,15 +101,15 @@ while ( $condition -lt 1) {
 #Enroll the Device in Autopilot
 Install-Script -Name get-windowsautopilotinfocommunity -Force
 
-Write-Host "When prompted, please login with your elevated PIM-ed up admin account that has write permissions to Intune"
+Write-Host "When prompted, please login with your elevated PIM-ed up admin account that has write permissions to Intune."
 Write-Host "`n"
 
 get-windowsautopilotinfocommunity.ps1 -Online -Assign -AssignedComputerName $userDeviceName
 
-Write-Host "All Commands Have Been Processed."
+Write-Host "All commands have been completed."
 Write-Host "`n"
 
-Write-Host "If there were no errors in the commands above, please continue with Autopilot setup of the device."
+Write-Host "If there were no errors in the console above,, please continue with Autopilot setup of the device."
 Write-Host "`n"
 Write-Host "Do so by going back to the Windows Device Setup screen and pressing the Windows Key 5 times to select Autopilot Setup."
 
