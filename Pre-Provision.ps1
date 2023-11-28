@@ -27,7 +27,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #>
 
 # Display Device Name and Serial Number
-Write-Host "Current Device Name:" 
+Write-Host "Current Device Name"
 Hostname
 
 get-ciminstance win32_bios | format-list serialnumber
@@ -38,8 +38,8 @@ get-tpm | format-list TpmPresent,TpmReady,TpmEnabled,TpmActivated,TpmOwned,Resta
 # Stop Script if TPM check fails
 $TPMver = wmic /namespace:\\root\cimv2\security\microsofttpm path win32_tpm get SpecVersion -value
 if ($TPMver -like "*2.0*") {
-	Write-Host "The TPM Specification version on this Device is 2.0. Continuing..."
-	Write-Hoost "`n"
+	Write-Host "The TPM Specification version on this Device is 2.0. All checks passed, Continuing..."
+	Write-Host "`n"
 } else {
 	Write-Host "WARNING:"
 	Write-Host "Autopilot Pre-Provisiong will not work on this device because"
@@ -80,7 +80,7 @@ Write-Host "`n"
 $systemDeviceName = Hostname
 
 while ( $condition -lt 1) {
-	$userDeviceName = Read-Host "Please Enter the new Device Name:"
+	$userDeviceName = Read-Host "Please Enter the new Device Name"
 	$systemDeviceName = Hostname
 
 	Write-Host "`n"
@@ -90,7 +90,7 @@ while ( $condition -lt 1) {
 		Write-Host "`n"
 		$condition = 1
 	} else {
-		Wirte-Host "The device name does not match what was entered. Please check your spelling and the device name and attempt again."
+		Write-Host "The device name does not match what was entered. Please check your spelling and the device name and attempt again."
 		Write-Host "`n"
 		Write-Host "If this doesn't work, please rename the device and start the script again."
 		Write-Host "`n"
@@ -106,10 +106,11 @@ Write-Host "`n"
 
 get-windowsautopilotinfocommunity.ps1 -Online -Assign -AssignedComputerName $userDeviceName
 
+# Wrap Up
 Write-Host "All commands have been completed."
 Write-Host "`n"
 
-Write-Host "If there were no errors in the console above,, please continue with Autopilot setup of the device."
+Write-Host "If there were no errors in the console above, please continue with Autopilot setup of the device."
 Write-Host "`n"
 Write-Host "Do so by going back to the Windows Device Setup screen and pressing the Windows Key 5 times to select Autopilot Setup."
 
