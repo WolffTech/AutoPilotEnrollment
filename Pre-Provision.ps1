@@ -54,7 +54,6 @@ if ($TPMver -like "*2.0*") {
 # Start services required to setup device by User
 Write-Host "Starting Settings, Computer-Management, & Program and Features"
 Write-Host "`n"
-Start-Process -FilePath "compmgmt.msc"
 Start-Process -FilePath "appwiz.cpl"
 Start-Process ms-Settings:
 
